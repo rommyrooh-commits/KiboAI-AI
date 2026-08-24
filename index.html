@@ -3,27 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>KiboAI Dashboard</title>
+  <title>KiboAI – AI Workspace</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <aside class="sidebar">
     <div class="brand"><span>K</span>KiboAI</div>
     <button class="new-chat" id="newChat">＋ New chat</button>
+    
     <p class="label">WORKSPACE</p>
-    <a class="active" href="#"><span>⌂</span> Overview</a>
-    <a href="#"><span>✦</span> AI Chat</a>
-    <a href="#"><span>▣</span> My Documents</a>
+    <a href="#" class="nav-link active" data-page="overview"><span>⌂</span> Overview</a>
+    <a href="#" class="nav-link" data-page="chat"><span>✦</span> AI Chat</a>
+    <a href="#" class="nav-link" data-page="cv"><span>📄</span> CV Builder</a>
+    
     <p class="label">AI TOOLS</p>
-    <a href="#"><span>📄</span> CV Builder</a>
-    <a href="#"><span>🎓</span> StudyMate</a>
-    <a href="#"><span>✍️</span> Smart Writer</a>
-    <a href="#"><span>🌍</span> Translator</a>
+    <a href="#" class="nav-link" data-page="cv"><span>📄</span> CV Builder</a>
+    <a href="#" class="nav-link" data-page="chat"><span>🎓</span> StudyMate</a>
+    <a href="#" class="nav-link" data-page="chat"><span>✍️</span> Smart Writer</a>
+    
     <div class="sidebar-bottom">
       <div class="credits">
-        <div><span>Free credits</span><b>82 / 100</b></div>
-        <div class="bar"><i></i></div>
-        <small>Reset in 18 days</small>
+        <div><span>Free plan</span><b>Unlimited*</b></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <small>*While testing with free API key</small>
       </div>
       <a href="#" id="openSettings"><span>⚙</span> Settings</a>
     </div>
@@ -42,17 +44,18 @@
       </div>
     </header>
 
-    <section class="content">
+    <!-- ===================== OVERVIEW ===================== -->
+    <section class="content page" id="page-overview">
       <div class="hero">
         <div>
           <p class="eyebrow">YOUR AI WORKSPACE</p>
           <h1>What can we <span>build</span> today?</h1>
-          <p class="muted">Choose a tool below or ask KiboAI anything. Your ideas are only a message away.</p>
+          <p class="muted">Choose a tool below or ask KiboAI anything.</p>
         </div>
         <div class="mini-stat">
-          <span>AI credits</span>
-          <strong>82</strong>
-          <small>available</small>
+          <span>Status</span>
+          <strong>Online</strong>
+          <small>Ready</small>
         </div>
       </div>
 
@@ -80,33 +83,103 @@
 
       <div class="section-title">
         <h2>AI tools</h2>
-        <a href="#">View all →</a>
       </div>
       <div class="tools">
-        <article>
+        <article class="nav-link" data-page="cv" style="cursor:pointer">
           <div class="tool-icon">📄</div>
           <h3>CV Builder</h3>
           <p>Build a professional CV from your details.</p>
-          <button data-prompt="Help me build my CV">Open tool →</button>
+          <button>Open tool →</button>
         </article>
-        <article>
+        <article class="nav-link" data-page="chat" style="cursor:pointer">
           <div class="tool-icon">🎓</div>
           <h3>StudyMate</h3>
           <p>Notes, explanations, quizzes and revision.</p>
-          <button data-prompt="Help me study a difficult topic">Open tool →</button>
+          <button>Open tool →</button>
         </article>
-        <article>
+        <article class="nav-link" data-page="chat" style="cursor:pointer">
           <div class="tool-icon">✍️</div>
           <h3>Smart Writer</h3>
           <p>Rewrite, summarize or improve your writing.</p>
-          <button data-prompt="Help me rewrite some text">Open tool →</button>
+          <button>Open tool →</button>
         </article>
-        <article>
+        <article class="nav-link" data-page="chat" style="cursor:pointer">
           <div class="tool-icon">💡</div>
           <h3>Idea Generator</h3>
           <p>Turn an empty page into useful ideas.</p>
-          <button data-prompt="Give me three profitable website ideas">Open tool →</button>
+          <button>Open tool →</button>
         </article>
+      </div>
+    </section>
+
+    <!-- ===================== CV BUILDER ===================== -->
+    <section class="content page hidden" id="page-cv">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">CV BUILDER</p>
+          <h1>Build your professional CV</h1>
+          <p class="muted">Fill in your details and let KiboAI generate a clean, modern CV.</p>
+        </div>
+      </div>
+
+      <div class="cv-layout">
+        <div class="cv-form card">
+          <h3>Your Details</h3>
+          
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="cv-name" placeholder="e.g. Kevin Otieno">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email *</label>
+              <input type="email" id="cv-email" placeholder="kevin@email.com">
+            </div>
+            <div class="form-group">
+              <label>Phone</label>
+              <input type="text" id="cv-phone" placeholder="+254 7XX XXX XXX">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" id="cv-location" placeholder="Nairobi, Kenya">
+          </div>
+          <div class="form-group">
+            <label>Professional Summary / Objective</label>
+            <textarea id="cv-summary" rows="3" placeholder="A short paragraph about yourself..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Education</label>
+            <textarea id="cv-education" rows="3" placeholder="Degree, school, year..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Work Experience</label>
+            <textarea id="cv-experience" rows="4" placeholder="Job title, company, responsibilities..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Skills</label>
+            <textarea id="cv-skills" rows="2" placeholder="Networking, Python, Communication..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Projects / Certifications (optional)</label>
+            <textarea id="cv-projects" rows="2" placeholder="Any projects or certificates..."></textarea>
+          </div>
+
+          <button id="generateCV" class="primary-btn">Generate Professional CV</button>
+        </div>
+
+        <div class="cv-preview card">
+          <div class="preview-header">
+            <h3>CV Preview</h3>
+            <div>
+              <button id="copyCV" class="small-btn">Copy</button>
+              <button id="downloadCV" class="small-btn">Download .txt</button>
+            </div>
+          </div>
+          <div id="cvResult" class="cv-result">
+            <p class="muted">Your generated CV will appear here...</p>
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -116,12 +189,12 @@
     <div class="modal-content">
       <h3>API Settings</h3>
       <p class="muted" style="margin-bottom:12px;font-size:13px">
-        Get a free key from <a href="https://console.groq.com" target="_blank">Groq</a> (recommended) or any OpenAI-compatible provider.
+        Get a free key from <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>
       </p>
       <label>API Key</label>
-      <input type="password" id="apiKeyInput" placeholder="gsk_... or sk-...">
-      <label style="margin-top:12px">Model (optional)</label>
-      <input type="text" id="modelInput" placeholder="llama-3.3-70b-versatile" value="llama-3.3-70b-versatile">
+      <input type="password" id="apiKeyInput" placeholder="gsk_...">
+      <label style="margin-top:12px">Model</label>
+      <input type="text" id="modelInput" value="llama-3.3-70b-versatile">
       <div class="modal-actions">
         <button id="saveSettings" class="primary">Save</button>
         <button id="closeSettings">Cancel</button>
@@ -131,4 +204,4 @@
 
   <script src="script.js"></script>
 </body>
-      </html>
+                </html>
