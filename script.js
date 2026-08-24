@@ -1,136 +1,174 @@
-// =====================================================
-// KiboAI-AI - Main JavaScript
-// =====================================================
-
 document.addEventListener("DOMContentLoaded", () => {
 
-    // -----------------------------
-    // ELEMENTS
-    // -----------------------------
+    // ==============================
+    // GET HTML ELEMENTS
+    // ==============================
 
+    const promptInput = document.getElementById("prompt");
+    const sendButton = document.getElementById("send");
+    const messages = document.getElementById("messages");
     const newChatButton = document.getElementById("newChat");
     const menuButton = document.getElementById("menu");
 
-    // -----------------------------
-    // NEW CHAT
-    // -----------------------------
+    // ==============================
+    // SEND MESSAGE
+    // ==============================
 
-    if (newChatButton) {
-        newChatButton.addEventListener("click", () => {
-            startNewChat();
-        });
-    }
+    function sendMessage() {
 
-    function startNewChat() {
-        const input = document.getElementById("userInput");
-        const response = document.getElementById("response");
+        const text = promptInput.value.trim();
 
-        if (input) {
-            input.value = "";
-            input.focus();
+        if (text === "") {
+            return;
         }
 
-        if (response) {
-            response.innerHTML = "";
-            response.style.display = "none";
+        // Add user's message
+        addMessage(text, "user");
+
+        // Clear input
+        promptInput.value = "";
+
+        // Temporary KiboAI response
+        setTimeout(() => {
+
+            const reply =
+                "I received your message. 🤖 " +
+                "I'm currently running in demo mode. " +
+                "The real AI connection will be added next.";
+
+            addMessage(reply, "ai");
+
+        }, 700);
+    }
+
+    // ==============================
+    // ADD MESSAGE TO CHAT
+    // ==============================
+
+    function addMessage(text, type) {
+
+        const bubble = document.createElement("div");
+
+        bubble.classList.add("bubble", type);
+
+        const safeText = escapeHTML(text);
+
+        if (type === "user") {
+
+            bubble.innerHTML =
+                "<b>You</b><br>" + safeText;
+
+        } else {
+
+            bubble.innerHTML =
+                "<b>KiboAI 🤖</b><br>" + safeText;
         }
 
-        console.log("KiboAI: New chat started.");
+        messages.appendChild(bubble);
+
+        // Automatically scroll down
+        messages.scrollTop = messages.scrollHeight;
     }
 
+    // ==============================
+    // SEND BUTTON
+    // ==============================
 
-    // -----------------------------
-    // MOBILE MENU
-    // -----------------------------
+    if (sendButton) {
 
-    if (menuButton) {
-        menuButton.addEventListener("click", () => {
-            const sidebar = document.querySelector(".sidebar");
-
-            if (sidebar) {
-                sidebar.classList.toggle("open");
-            }
+        sendButton.addEventListener("click", () => {
+            sendMessage();
         });
+
     }
 
+    // ==============================
+    // ENTER KEY
+    // ==============================
 
-    // -----------------------------
-    // SIDEBAR NAVIGATION
-    // -----------------------------
+    if (promptInput) {
 
-    const navigationLinks = document.querySelectorAll(".sidebar a");
+        promptInput.addEventListener("keydown", (event) => {
 
-    navigationLinks.forEach((link) => {
+            if (event.key === "Enter") {
 
-        link.addEventListener("click", (event) => {
-
-            const href = link.getAttribute("href");
-
-            // Ignore links that don't have a real destination
-            if (!href || href === "#") {
                 event.preventDefault();
+
+                sendMessage();
             }
 
-            // Remove active state
-            navigationLinks.forEach((item) => {
-                item.classList.remove("active");
-            });
+        });
 
-            // Add active state
-            link.classList.add("active");
+    }
 
-            // Close mobile sidebar
-            const sidebar = document.querySelector(".sidebar");
+    // ==============================
+    // SUGGESTION BUTTONS
+    // ==============================
 
-            if (sidebar) {
-                sidebar.classList.remove("open");
-            }
+    const suggestionButtons =
+        document.querySelectorAll("[data-prompt]");
+
+    suggestionButtons.forEach((button) => {
+
+        button.addEventListener("click", () => {
+
+            const text = button.getAttribute("data-prompt");
+
+            promptInput.value = text;
+
+            promptInput.focus();
+
         });
 
     });
 
+    // ==============================
+    // NEW CHAT
+    // ==============================
 
-    // -----------------------------
-    // SIMPLE KIBOAI RESPONSE
-    // -----------------------------
+    if (newChatButton) {
 
-    window.askKiboAI = function () {
+        newChatButton.addEventListener("click", () => {
 
-        const input = document.getElementById("userInput");
-        const response = document.getElementById("response");
+            messages.innerHTML = `
+                <div class="bubble ai">
+                    <b>Hi! I'm KiboAI. 🤖</b><br>
+                    Tell me what you're working on and I'll help you get it done.
+                </div>
+            `;
 
-        if (!input || !response) {
-            console.warn("Chat input or response element was not found.");
-            return;
-        }
+            promptInput.value = "";
 
-        const question = input.value.trim();
+            promptInput.focus();
 
-        if (question === "") {
+        });
 
-            response.style.display = "block";
-            response.innerHTML =
-                "<p>Please type a question first.</p>";
+    }
 
-            return;
-        }
+    // ==============================
+    // MOBILE MENU
+    // ==============================
 
-        response.style.display = "block";
+    if (menuButton) {
 
-        response.innerHTML =
-            "<p><strong>You:</strong> " +
-            escapeHTML(question) +
-            "</p>" +
-            "<p><strong>KiboAI:</strong> " +
-            "I received your message. Real AI connection will be added next. 🤖</p>";
+        menuButton.addEventListener("click", () => {
 
-        input.value = "";
-    };
+            const sidebar =
+                document.querySelector(".sidebar");
 
+            if (sidebar) {
 
-    // -----------------------------
-    // SECURITY HELPER
-    // -----------------------------
+                sidebar.classList.toggle("open");
+
+            }
+
+        });
+
+    }
+
+    // ==============================
+    // SECURITY
+    // ==============================
 
     function escapeHTML(text) {
 
@@ -139,37 +177,12 @@ document.addEventListener("DOMContentLoaded", () => {
         div.textContent = text;
 
         return div.innerHTML;
-    }
-
-
-    // -----------------------------
-    // ENTER KEY SUPPORT
-    // -----------------------------
-
-    const userInput = document.getElementById("userInput");
-
-    if (userInput) {
-
-        userInput.addEventListener("keydown", (event) => {
-
-            if (event.key === "Enter" && !event.shiftKey) {
-
-                event.preventDefault();
-
-                if (typeof window.askKiboAI === "function") {
-                    window.askKiboAI();
-                }
-
-            }
-
-        });
 
     }
 
-
-    // -----------------------------
-    // INITIAL MESSAGE
-    // -----------------------------
+    // ==============================
+    // STARTUP MESSAGE
+    // ==============================
 
     console.log("KiboAI-AI loaded successfully 🚀");
 
